@@ -1,15 +1,6 @@
-/*	-WHAT IS THIS?-
-	The script featured here is an explanation of how to make your own custom addition to MPMB's D&D 5e Character Tools.
-	To add your own content to the Character Sheet, use the syntax below and save it in a file. You can then import this file directly to the sheet using the "Import" button and "Import/Export" bookmark.
-	There you can either import the file as a whole or just copy the text into a dialogue.
-	-KEEP IN MIND-
-	Note that you can add as many custom codes as you want, either by importing consecutive files or pasting the scripts into the dialogue.
-	It is recommended to enter the code in a freshly downloaded or reset sheet before adding any other information so that there won't be any conflicts.
-*/
-
 /*	-INFORMATION-
 	Subject:	Subclass (a.k.a. Archetype)
-	Effect:		This is the syntax for adding a new subclass/archetype to a class that is defined in the sheet, or to a class you made yourself
+	Effect:		This is the syntax for adding a new subclass/archetype to a class that is defined in the sheet, or to a class you made yourself === 	action : (["bonus action", ""],["reaction", ""]),
 	Sheet:		v12.999 (2017-11-29)
 */
 
@@ -17,56 +8,66 @@ var iFileName = "Homebrew by Stanseas - Punisher.js"; // Optional; This is how t
 RequiredSheetVersion(12.999); // Optional; This is the minimum required version number of the sheet for the script to work. If the sheet being used to import the script is of an earlier version, the user will be warned
 
 // New Fighting Style
-AddFightingStyle(["fighter", "ranger", "paladin"], "Harry", {
-	name : "Harry",
-	source : ["HB", "by Stanseas"],
-	description : "\n   " + "After hitting them once, your repeated attacks against your opponent gives them" + "\n   " + "disadvantage on attacks and saves until you miss or attack another creature. You may also" + "\n   " + "use your Bonus Action each round to have Advantage on attack rolls against them.",
-	action : ["bonus action", ""]
+AddFightingStyle(["fighter", "ranger", "paladin"], "Brutal", {
+	name : "Brute Force",
+	source : ["HB", "Fighting Style by Stanseas"],
+	description : "\n   " + "If you hit by 5 points or more above their AC you can use your bonus action to Shove them." + "\n   " + "If they miss you by 5 points or more you gain Advantage on your next attack against them.",
+	action : ["bonus action", "(Roll to hit >5)"],
 });
 
 AddSubClass( // this is the function you will be calling to add the variant
 
-	"fighter", // Parent Class object name; Required; This has to be the exact name of the class of which you are adding a subclass. Look for the name of the class in the ClassList variable. For the default 12 classes these names are: "barbarian", "bard", "cleric", "druid", "fighter", "monk", "paladin", "ranger", "rogue", "sorcerer", "warlock", and "wizard"
+	"fighter", // Parent Class object name; Required; This has to be the exact name of the class of which you are adding a subclass. 
 	
 	"punisher", // Object name; Required; The name the entry in the ClassSubList will have. This can be anything, it is just something that the sheet uses to reference the new entry and it will never be printed anywhere
 	
 	{ // don't forget this opening bracket
 
-		regExpSearch : /^(?=.*punisher).*$/i, //required; regular expression of what to look for (i.e. now it looks for any entry that has both the words "special" and "me" in it, disregarding capitalization). If this looks to complicated, just write: /specialme/i
-		
+		regExpSearch : /^(?=.*punisher).*$/i, //required; regular expression of what to look for 
 		subname : "Punisher", //required; the name of the subclass
 		
-		source : ["HB", "by Stanseas"], //required; the source and the page number. "HB" stands for homebrew. See the "Complete SourceList" for an overview of sources that are already defined. Or define a new source using the "Homebrew Syntax - SourceList.js". // This can be an array of arrays to indicate the things appears in multiple sources. For example, if something appears on page 7 of the Elemental Evil Player's Companion and on page 115 of the Sword Coast Adventure Guide, use the following: [["E", 7], ["S", 115]]
+		source : ["HB", "by Stanseas"], //required; the source and the page number. "HB" stands for homebrew. u/stanseas is the author.
 		
-		// after defining the above three, you don't need to define anything more, but you can. Defining more stuff will overwrite the entries as they are given in the ClassList. So if you do not need something to be different than the basics of the class (for example, you subclass uses the same spellcasting ability), then you don't need to define it again.
-		// For the syntax of how to define more stuff, look at the ClassList (see "Homebrew Syntax - ClassList.js"). You can define all the same stuff in the same way. The below are a couple of examples:
-		
-		fullname : "Punisher", //if no fullname is defined it will be automatically generated as "Class Name (Subclass name)". In this example that would be: "MyClass (Path of SpecialMe)"
+		// fullname : "Punisher", //if no fullname is defined it will be automatically generated as "Class Name (Subclass name)".
 				
-		features : { //unlike the other entries, "features" will not delete all the features from the ClassList, but will add to the features in the ClassList. For this to work properly, the feature object has to be named "subclassfeatureX" and not something appropriate for the feature. The below are the features of the purple Dragon Knight
+		features : { //unlike the other entries, "features" will not delete all the features from the ClassList, but will add to the features in the ClassList. 
 		
-			"subclassfeature3" : { // has to start with "subclassfeature" followed by a number. Note that the name has to be unique for this subclass, but it can be the same name as one of the features of the class in the ClassList variable. If you use the same name as a feature in the ClassList variable, it will be overwritten with this entry
-				name : "Targeted Foe",
+			"subclassfeature3" : { 
+				name : "Predator Mark",
 				source : ["HB", "by Stanseas"],
 				minlevel : 3,
-				description : "\n   " + "After discovering some evidence of their passage you can declare a new Targeted Foe," + "\n   " + "they are considered Marked (DMG 271) until you spend a short rest identifying a new one" + "\n   " + "and you have advantage on any Wisdom (Perception) or Wisdom (Survival) checks you make" + "\n   " + "to find them. After tracking your Targeted Foe for at least an hour, you can match their pace" + "\n   " + "with no penalties from difficult terrain and you ignore the first level of exhaustion from" + "\n   " + "a forced march.",
+				description : "\n   " + "At level 3, and after picking up the trail of or making visual contact with a creature, you may" + "\n   " + "select a target that becomes Hunted. You may only have one Hunted target at a time. At the" + "\n   " + "start of your first turn of each combat, if you take the Attack action against your Hunted" + "\n   " + "target on that turn, you can make one additional weapon attack as part of that action.",
+				action : ["action", " (first round)"],
+			},
+			"subclassfeature3.1" : { 
+				name : "Predator Instinct",
+				source : ["HB", "by Stanseas"],
+				minlevel : 3,
+				description : "\n   " + "Once per short rest you can extend your awareness to the region around you in an effort to" + "\n   " + "locate your Hunted target. You sense the direction to it’s location as long as they are within" + "\n   " + "one mile of you. If they are in motion, you know their direction of movement. If they are" + "\n   " + "magically hidden from divination or tracking this ability fails at the point they first became" + "\n   " + "protected. If you have been tracking your Hunted target for an hour the range of this ability" + "\n   " + "extends to 6 miles and you gain advantage on Insight, Perception, and Survival to track them.",
 				recovery : "short rest",
-				eval : "try {AddToNotes(ClassSubList['punisher'].features.subclassfeature3, \"Targeted Foe\");} catch (er) {};",
-				removeeval : "try {AddToNotes('', '', ClassSubList['punisher'].features.subclassfeature3, \"Targeted Foe\");} catch (er) {};",
+			},
+			"subclassfeature3.2" : { 
+				name : "Predator Vision",
+				source : ["HB", "by Stanseas"],
+				minlevel : 3,
+				description : "\n   " + "Once per long rest you can use your action to attempt to perceive through the senses of your" + "\n   " + "Hunted target until the end of your next turn. Your target may make a Wisdom saving throw" + "\n   " + "(DC 8 + Wis + Prof). If you have a personal item or some of their blood/hair/skin, etc., they" + "\n   " + "make their roll with disadvantage. As long as the creature is on the same plane of existence" + "\n   " + "as you and they continue to fail their saving throw, you can use your action on subsequent" + "\n   " + "turns to maintain this connection, extending the Duration until the end of your next turn." + "\n   " + "While perceiving through the other creature’s senses, you benefit from any special senses" + "\n   " + "possessed by that creature, and you are Blinded and Deafened to your own surroundings.",
+				action : ["action", ""],
+				recovery : "long rest",
 			},
 			"subclassfeature7" : {
-				name : "No Escape",
-				source : ["HB", "by Stanseas"],
-				minlevel : 7,
-				description : "\n   " + "When you have a Targeted Foe, you always know the direction they are from you" + "\n   " + "as long as they are on the same plane or existence. Requires an object they've interacted" + "\n   " + "with recently, a personal item or something with their blood on it.",
-			},
-			"subclassfeature10" : {
 				name : "Telltale Heart",
 				source : ["HB", "by Stanseas"],
+				minlevel : 7,
+				description : "\n   " + "Starting at level 7, your Hunted can't benefit from less than full cover anymore." + "\n   " + "You automatically succeed in a contested roll to detect them if they are within to 60’." + "\n   " + "You are not at a disadvantage to hit them when they are invisible. You also have advantage" + "\n   " + "on checks to identify them if they appear different (alter self, illusion, polymorph, etc.)" + "\n   " + "On your turn if you succeed in hitting your Hunted target, you can use your Bonus Action to" + "\n   " + "impose a Disadvantage on their attacks and saves until the start of your next turn.",
+				action : ["bonus action", " (on successful hit)"],
+			},
+			"subclassfeature10" : {
+				name : "Shadow of the Hawk",
+				source : ["HB", "by Stanseas"],
 				minlevel : 10,
-				description : "\n   " + "Your Targeted Foe can't benefit from less than full cover anymore." + "\n   " + "You automatically succeed in a contested roll to detect them within visual range up to 60’." + "\n   " + "You are not at a disadvantage to hit them when they are invisible and you have advantage" + "\n   " + "on checks to identify them if they appear different (alter self, illusion, polymorph, etc.)",
-				eval : "try {AddToNotes(ClassSubList['punisher'].features.subclassfeature10, \"Telltale Heart\");} catch (er) {};",
-				removeeval : "try {AddToNotes('', '', ClassSubList['punisher'].features.subclassfeature10, \"Telltale Heart\");} catch (er) {};",
+				description : "\n   " + "You are not surprised by attacks or sneak attacks that target you. You can use" + "\n   " + "your Reaction to attack the creature attacking you. If you hit, that attack is interrupted.",
+				action : ["reaction", " (interrupt your attacker)"],
+				savetxt : { immune : ["surprise & sneak atks"] }
 			},
 			"subclassfeature15" : {
 				name : "Finishing Blow",
@@ -78,7 +79,7 @@ AddSubClass( // this is the function you will be calling to add the variant
 				name : "Coup De Grâce",
 				source : ["HB", "by Stanseas"],
 				minlevel : 18,
-				description : "\n   " + "In conjunction with Finishing Blow, once per long rest you may" + "\n   " + "add 100 to the amount of damage required to bring your target to 0 hp.",
+				description : "\n   " + "Once per long rest you may add 100 to the amount of dmg you can do with Finishing Blow.",
 				recovery : "long rest",
 			},
 		}
